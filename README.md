@@ -1,4 +1,4 @@
-FlawDetector [![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)]
+FlawDetector ![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)
 =============
 FlawDetector is a tool to detect ruby code's flaw with static analysis.
 To detect code's flaw, it analyze RubyVM bytecode which is compiled from ruby code.
