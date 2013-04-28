@@ -1,0 +1,18 @@
+before_install:
+  - ruby -C ext/insns_ext extconf.rb
+  - make -C ext/insns_ext
+script:
+  - bundle
+  - rake spec
+  - rake install
+rvm:
+  - 1.9.2
+  - 1.9.3
+  - 2.0.0
+matrix:
+  allow_failures:
+    - rvm: 2.0.0
+notifications:
+  email:
+    on_success: always
+    on_failure: always
