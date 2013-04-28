@@ -1,4 +1,4 @@
-FlawDetector [![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)][Continuous Integration]
+FlawDetector [![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)]
 =============
 FlawDetector is a tool to detect ruby code's flaw with static analysis.
 To detect code's flaw, it analyze RubyVM bytecode which is compiled from ruby code.
@@ -21,7 +21,7 @@ $ flaw_detector -f result.csv sample/flaw_in_code.rb
 Command Result
 -------
 Currently, FlawDetector supports only CSV format result.
-Result examples is as follows:
+Result example is as follows:
 ```file
 $ cat result.csv
 msgid,file,line,short_desc,long_desc,details
