@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.extensions                = ["ext/insns_ext/extconf.rb"]
-  s.required_ruby_version = ">= 1.9.0"
+  s.required_ruby_version = "~> 1.9.0"
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
