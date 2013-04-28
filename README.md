@@ -1,10 +1,18 @@
-FlawDetector ![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)
+FlawDetector [![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)][Continuous Integration]
 =============
 FlawDetector is a tool to detect ruby code's flaw with static analysis.
 In static analysis, it analyze RubyVM bytecode which is compiled from ruby code.
 
 FlawDetector is similer to FindBugs which is a tool to detect java code's flaw.
 For details of FindBugs, refer to references section in this text file.
+
+[Continuous Integration]: http://travis-ci.org/ginriki/flaw_detector
+
+Getting Started
+-------
+```shell
+$ gem install flaw_detector
+```
 
 Usage
 -------
@@ -30,7 +38,8 @@ NP_ALWAYS_FALSE,sample/flaw_in_code.rb,7,False value missing method received,Fal
 ```
 
 Each line represents a flaw.
-If you want to know how flaw can be shown in result, refer to lib/message.rb
+If you want to know how flaw can be shown in result, 
+refer to [message.rb](https://github.com/ginriki/flaw_detector/blob/master/lib/flaw_detector/message.rb)
 
 Fix and Recheck
 ------
