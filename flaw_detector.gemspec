@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Rikiya Ayukawa"]
   s.email       = ["dbc.ginriki@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{The tool to detect code flaw with static analysis}
-  s.description = %q{The tool detects code flaw, which should be fixed, with static analysis of RubyVM bytecode. Therefore, it works for only ruby 1.9.0 or later.}
+  s.summary     = %q{The tool to detect code's flaw with static analysis}
+  s.description = %q{The tool detects code's flaw, which should be fixed, with static analysis of RubyVM bytecode. Therefore, it works for only ruby 1.9.0 or later.}
 
   s.rubyforge_project = "flaw detector"
 
