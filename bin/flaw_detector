@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+begin
+  require 'flaw_detector'
+rescue LoadError
+  require 'rubygems'
+  require 'flaw_detector'
+end
+
+def usage
+  puts " "*2 + "Usage:"
+  puts " "*4 + "#{File.basename($0)} [-f outfille] [--help] rbfile ..."
+end
+
+rl_opts = {:format => "csv"}
+opt = OptionParser.new
+opt.on('-f outfile') {|v| rl_opts[:outfile] = v }
+opt.on('-h', '--help') {|v| usage;exit 0}
+#opt.on('-t format', '--type format') {|v| rl_opts[:format] = v }
+opt.parse!(ARGV)
+
+if ARGV.size == 0
+  usage
+  exit 1
+end
+
+io = STDOUT
+io = File.open(rl_opts[:outfile], "w") if rl_opts[:outfile]
+formatter = eval("FlawDetector::Formatter::#{rl_opts[:format].capitalize}Formatter").new(io)
+con = FlawDetector::BasicController.new(formatter)
+con.detectors << FlawDetector::Detector::NilFalsePathFlow.new
+if con.run(ARGV)
+  puts "OK"
+  exit 0
+else
+  exit 2 #found flaws
+end
