@@ -1,7 +1,7 @@
 FlawDetector ![Build Status](https://secure.travis-ci.org/ginriki/flaw_detector.png)
 =============
 FlawDetector is a tool to detect ruby code's flaw with static analysis.
-To detect code's flaw, it analyze RubyVM bytecode which is compiled from ruby code.
+In static analysis, it analyze RubyVM bytecode which is compiled from ruby code.
 
 FlawDetector is similer to FindBugs which is a tool to detect java code's flaw.
 For details of FindBugs, refer to references section in this text file.
@@ -34,7 +34,7 @@ If you want to know how flaw can be shown in result, refer to lib/message.rb
 
 Fix and Recheck
 ------
-You should fix source code and recheck it by FlawDetector until "OK" is displaied
+According to the result, you should fix source code and recheck it by FlawDetector until "OK" is displaied
 ```file
 $ emacs sample/flaw_in_code.rb
 $ cat sample/flaw_in_code.rb
