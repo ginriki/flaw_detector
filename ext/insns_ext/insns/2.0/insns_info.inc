@@ -9,18 +9,18 @@
   or insns2vm.rb
  */
 
-#define TS_OFFSET 'O'
-#define TS_NUM 'N'
-#define TS_LINDEX 'L'
-#define TS_DINDEX 'D'
-#define TS_VALUE 'V'
-#define TS_ID 'I'
-#define TS_GENTRY 'G'
-#define TS_IC 'C'
-#define TS_CDHASH 'H'
 #define TS_ISEQ 'S'
+#define TS_GENTRY 'G'
+#define TS_OFFSET 'O'
+#define TS_CALLINFO 'C'
 #define TS_VARIABLE '.'
+#define TS_CDHASH 'H'
+#define TS_IC 'K'
+#define TS_ID 'I'
 #define TS_FUNCPTR 'F'
+#define TS_VALUE 'V'
+#define TS_LINDEX 'L'
+#define TS_NUM 'N'
 
 static const char *const insn_name_info[] = {
   "nop",
@@ -28,8 +28,6 @@ static const char *const insn_name_info[] = {
   "setlocal",
   "getspecial",
   "setspecial",
-  "getdynamic",
-  "setdynamic",
   "getinstancevariable",
   "setinstancevariable",
   "getclassvariable",
@@ -52,7 +50,6 @@ static const char *const insn_name_info[] = {
   "expandarray",
   "concatarray",
   "splatarray",
-  "checkincludearray",
   "newhash",
   "newrange",
   "pop",
@@ -64,13 +61,14 @@ static const char *const insn_name_info[] = {
   "setn",
   "adjuststack",
   "defined",
+  "checkmatch",
   "trace",
   "defineclass",
   "send",
+  "opt_send_simple",
   "invokesuper",
   "invokeblock",
   "leave",
-  "finish",
   "throw",
   "jump",
   "branchif",
@@ -79,7 +77,6 @@ static const char *const insn_name_info[] = {
   "onceinlinecache",
   "setinlinecache",
   "opt_case_dispatch",
-  "opt_checkenv",
   "opt_plus",
   "opt_minus",
   "opt_mult",
@@ -96,6 +93,7 @@ static const char *const insn_name_info[] = {
   "opt_aset",
   "opt_length",
   "opt_size",
+  "opt_empty_p",
   "opt_succ",
   "opt_not",
   "opt_regexpmatch1",
@@ -103,19 +101,23 @@ static const char *const insn_name_info[] = {
   "opt_call_c_function",
   "bitblt",
   "answer",
+  "getlocal_OP__WC__0",
+  "getlocal_OP__WC__1",
+  "setlocal_OP__WC__0",
+  "setlocal_OP__WC__1",
+  "putobject_OP_INT2FIX_O_0_C_",
+  "putobject_OP_INT2FIX_O_1_C_",
 
 };
 
 static const char *const insn_operand_info[] = {
   "", 
-  "L", 
-  "L", 
-  "VN", 
-  "V", 
-  "DN", 
-  "DN", 
-  "IC", 
-  "IC", 
+  "LN", 
+  "LN", 
+  "NN", 
+  "N", 
+  "IK", 
+  "IK", 
   "I", 
   "I", 
   "I", 
@@ -136,7 +138,6 @@ static const char *const insn_operand_info[] = {
   "NN", 
   "", 
   "V", 
-  "V", 
   "N", 
   "N", 
   "", 
@@ -149,21 +150,21 @@ static const char *const insn_operand_info[] = {
   "N", 
   "NVV", 
   "N", 
+  "N", 
   "ISN", 
-  "INSNC", 
-  "NSN", 
-  "NN", 
-  "", 
+  "C", 
+  "C", 
+  "C", 
+  "C", 
   "", 
   "N", 
   "O", 
   "O", 
   "O", 
-  "OC", 
-  "OC", 
-  "C", 
+  "OK", 
+  "OK", 
+  "K", 
   "HO", 
-  "", 
   "C", 
   "C", 
   "C", 
@@ -182,9 +183,16 @@ static const char *const insn_operand_info[] = {
   "C", 
   "C", 
   "C", 
+  "C", 
   "V", 
   "", 
   "F", 
+  "", 
+  "", 
+  "L", 
+  "L", 
+  "L", 
+  "L", 
   "", 
   "", 
 
@@ -192,12 +200,10 @@ static const char *const insn_operand_info[] = {
 
 static const int insn_len_info[] = {
   1,
-  2,
-  2,
-  3,
-  2,
   3,
   3,
+  3,
+  2,
   3,
   3,
   2,
@@ -219,7 +225,6 @@ static const int insn_len_info[] = {
   2,
   3,
   1,
-  2,
   2,
   2,
   2,
@@ -233,41 +238,48 @@ static const int insn_len_info[] = {
   2,
   4,
   2,
+  2,
   4,
-  6,
-  4,
-  3,
-  1,
-  1,
-  2,
-  2,
-  2,
-  2,
-  3,
-  3,
-  2,
-  3,
-  1,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
-  3,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
   2,
   2,
   2,
   2,
   1,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  2,
+  3,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  3,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  1,
+  2,
+  1,
+  1,
+  2,
+  2,
+  2,
   2,
   1,
   1,
@@ -290,7 +302,6 @@ static const int insn_stack_push_num_info[] = {
   1,
   0,
   1,
-  0,
   1,
   1,
   1,
@@ -304,8 +315,6 @@ static const int insn_stack_push_num_info[] = {
   1,
   1,
   1,
-  1,
-  2,
   1,
   1,
   0,
@@ -317,6 +326,21 @@ static const int insn_stack_push_num_info[] = {
   1,
   1,
   1,
+  1,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
   0,
   1,
   1,
@@ -325,34 +349,26 @@ static const int insn_stack_push_num_info[] = {
   1,
   1,
   1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
   0,
+  1,
+  1,
+  1,
+  1,
   0,
-  0,
-  1,
-  1,
-  1,
-  0,
-  0,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
   0,
   1,
   1,
@@ -378,12 +394,6 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
           return depth + 1;
         }
         case BIN(setspecial):{
-          return depth + -1;
-        }
-        case BIN(getdynamic):{
-          return depth + 1;
-        }
-        case BIN(setdynamic):{
           return depth + -1;
         }
         case BIN(getinstancevariable):{
@@ -465,9 +475,6 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
         case BIN(splatarray):{
           return depth + 0;
         }
-        case BIN(checkincludearray):{
-          return depth + 0;
-        }
         case BIN(newhash):{
           int inc = 0;
         int num = FIX2INT(opes[0]);
@@ -516,6 +523,9 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
         case BIN(defined):{
           return depth + 0;
         }
+        case BIN(checkmatch):{
+          return depth + -1;
+        }
         case BIN(trace):{
           return depth + 0;
         }
@@ -524,28 +534,29 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
         }
         case BIN(send):{
           int inc = 0;
-        int op_argc = FIX2INT(opes[1]);
-        int op_flag = FIX2INT(opes[3]);
-        inc += - (int)(op_argc + ((op_flag & VM_CALL_ARGS_BLOCKARG_BIT) ? 1 : 0));;
+        CALL_INFO ci = (CALL_INFO)(opes[0]);
+        inc += - (int)(ci->orig_argc + ((ci->flag & VM_CALL_ARGS_BLOCKARG) ? 1 : 0));;
+        return depth + inc;
+        }
+        case BIN(opt_send_simple):{
+          int inc = 0;
+        CALL_INFO ci = (CALL_INFO)(opes[0]);
+        inc += -ci->orig_argc;;
         return depth + inc;
         }
         case BIN(invokesuper):{
           int inc = 0;
-        int op_argc = FIX2INT(opes[0]);
-        int op_flag = FIX2INT(opes[2]);
-        inc += - (int)(op_argc + ((op_flag & VM_CALL_ARGS_BLOCKARG_BIT) ? 1 : 0));;
+        CALL_INFO ci = (CALL_INFO)(opes[0]);
+        inc += - (int)(ci->orig_argc + ((ci->flag & VM_CALL_ARGS_BLOCKARG) ? 1 : 0));;
         return depth + inc;
         }
         case BIN(invokeblock):{
           int inc = 0;
-        int num = FIX2INT(opes[0]);
-        inc += 1 - num;;
+        CALL_INFO ci = (CALL_INFO)(opes[0]);
+        inc += 1 - ci->orig_argc;;
         return depth + inc;
         }
         case BIN(leave):{
-          return depth + 0;
-        }
-        case BIN(finish):{
           return depth + 0;
         }
         case BIN(throw):{
@@ -573,9 +584,6 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
           int inc = 0;
         inc += -1;;
         return depth + inc;
-        }
-        case BIN(opt_checkenv):{
-          return depth + 0;
         }
         case BIN(opt_plus):{
           return depth + -1;
@@ -625,6 +633,9 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
         case BIN(opt_size):{
           return depth + 0;
         }
+        case BIN(opt_empty_p):{
+          return depth + 0;
+        }
         case BIN(opt_succ):{
           return depth + 0;
         }
@@ -644,6 +655,24 @@ insn_stack_increase(int depth, int insn, VALUE *opes)
           return depth + 1;
         }
         case BIN(answer):{
+          return depth + 1;
+        }
+        case BIN(getlocal_OP__WC__0):{
+          return depth + 1;
+        }
+        case BIN(getlocal_OP__WC__1):{
+          return depth + 1;
+        }
+        case BIN(setlocal_OP__WC__0):{
+          return depth + -1;
+        }
+        case BIN(setlocal_OP__WC__1):{
+          return depth + -1;
+        }
+        case BIN(putobject_OP_INT2FIX_O_0_C_):{
+          return depth + 1;
+        }
+        case BIN(putobject_OP_INT2FIX_O_1_C_):{
           return depth + 1;
         }
 
