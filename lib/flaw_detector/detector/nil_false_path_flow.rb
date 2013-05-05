@@ -42,13 +42,13 @@ module FlawDetector
             klass_specified_edge = nil
             case obj_insn[0]
             when :send
-              if argnum == 0 && RCEV_KLASS_OF_METHODS.has_key?(obj_insn[1]) #varnum is the receiver and method is a nil check
+              if argnum == 0 && RCEV_KLASS_OF_METHODS.has_key?(obj_insn[:mid]) #varnum is the receiver and method is a nil check
                 next_obj_index,next_argnum = frame.find_use_insn_index_of_ret(obj_index, obj_insn)
                 next_obj_insn = frame.raw_block_data[:body][:insns][next_obj_index]
                 case next_obj_insn[0]
                 when :branchif, :branchunless
-                  klass_specified_edge = RCEV_KLASS_OF_METHODS[obj_insn[1]][:message][next_obj_insn[0]]
-                  klass = RCEV_KLASS_OF_METHODS[obj_insn[1]][:klass]
+                  klass_specified_edge = RCEV_KLASS_OF_METHODS[obj_insn[:mid]][:message][next_obj_insn[0]]
+                  klass = RCEV_KLASS_OF_METHODS[obj_insn[:mid]][:klass]
                 end
               end
             when :branchif, :branchunless
@@ -120,8 +120,10 @@ module FlawDetector
         return result
       end
 
-      # _variable_ :: nil variable on node
-      # return: check_end?, detected ngs
+      # @param variable [Hash] nil variable on node
+      # @return [Boolean] check_end?
+      # @return [Array] detected ngs
+      # @todo remove false positive detection of neither compareable or replacement operator such as "<<"
       def check_nil_var_ref(node, variable)
         ng_list = [] # each element has keys: {:variable, :index, :frame}
         unless node.prev_nodes.first == node.prev_nodes.last
@@ -147,8 +149,8 @@ module FlawDetector
               use_insn = frame.insns[use_index]
               case use_insn[0]
               when :send
-                if (use_argnum == 0 && !NIL_METHODS.include?(use_insn[1])) ||
-                    (use_argnum == 1 && CALC_CODE.values.include?(use_insn[1]) && !NIL_METHODS.include?(use_insn[1]))
+                if (use_argnum == 0 && !NIL_METHODS.include?(use_insn[:mid])) ||
+                    (use_argnum == 1 && CALC_CODE.values.include?(use_insn[:mid]) && !NIL_METHODS.include?(use_insn[:mid]))
                   ng_list << {:variable => variable, :index => use_index, :frame => frame}
                 end
               when *(CALC_CODE.keys)

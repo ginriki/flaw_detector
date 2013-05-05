@@ -6,6 +6,7 @@ require "flaw_detector/detector/nil_false_path_flow"
 require "flaw_detector/code_model/code_document"
 require "flaw_detector/code_model/insns_frame"
 require "flaw_detector/code_model/cfg_node"
+require "flaw_detector/iseq/instruction_container"
 require File.expand_path("../../ext/insns_ext/insn_ext.rb", __FILE__)
 
 module FlawDetector
@@ -89,16 +90,15 @@ module FlawDetector
     iseq[13].each do |mixed|
       case mixed
       when Array # instruction
-        insns << mixed
+        insns << Iseq::InstructionContainer.new(mixed, header)
         opcode = mixed.first.to_s
         if INSNS_HAVE_ISEQ_IN_OPERAND.keys.include?(opcode)
-          operand_num = INSNS_HAVE_ISEQ_IN_OPERAND[opcode]
-          iseq_in_operand = iseq_parse(mixed[operand_num])
+          iseq_in_operand = iseq_parse(insns.last[:blockptr])
           insn_pos = insns.count-1
           insns_pos_to_operand_iseq[insn_pos] = iseq_in_operand
           
           #replace to link
-          mixed[operand_num] = insn_pos
+          #mixed[operand_num] = insn_pos
           
           if insns_pos_to_operand_iseq[insn_pos] &&
               insns_pos_to_operand_iseq[insn_pos][:header][:type] == ISeqHeader::TYPE_BLOCK
