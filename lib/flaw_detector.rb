@@ -29,9 +29,17 @@ module FlawDetector
   INSNS_OF_BRANCH = ["branchif", "branchunless"]
   
   def parse(code_str, filepath="<compiled>")
-    isqns = RubyVM::InstructionSequence.new(code_str)
-    data = iseq_parse(isqns.to_a)
-    CodeDocument.create(data, filepath)
+    tmp_compile_option = RubyVM::InstructionSequence.compile_option
+    doc = nil
+    begin
+      RubyVM::InstructionSequence.compile_option = false
+      isqns = RubyVM::InstructionSequence.compile(code_str)
+      data = iseq_parse(isqns.to_a)
+      doc = CodeDocument.create(data, filepath)
+    ensure
+      RubyVM::InstructionSequence.compile_option = tmp_compile_option
+    end
+    return doc
   end
 
   def parse_file(file)

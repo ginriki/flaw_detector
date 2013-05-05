@@ -147,8 +147,8 @@ module FlawDetector
               use_insn = frame.insns[use_index]
               case use_insn[0]
               when :send
-                use_insn[1]
-                if use_argnum == 0 && !NIL_METHODS.include?(use_insn[1])
+                if (use_argnum == 0 && !NIL_METHODS.include?(use_insn[1])) ||
+                    (use_argnum == 1 && CALC_CODE.values.include?(use_insn[1]) && !NIL_METHODS.include?(use_insn[1]))
                   ng_list << {:variable => variable, :index => use_index, :frame => frame}
                 end
               when *(CALC_CODE.keys)
