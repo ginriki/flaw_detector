@@ -13,7 +13,7 @@ module FlawDetector
     "RCN_REDUNDANT_FALSECHECK_OF_TRUE_VALUE" => {
       :short_desc => "Redundant falsecheck of value known to be true",
       :long_desc => "Redundant falsecheck of %{0} which is known to be true in LINE:%{1}",
-      :details => "This method contains a redundant check of a false value against the constant true."
+      :details => "This method contains a redundant check of a true value against the constant false."
     },
     "NP_ALWAYS_FALSE" => {
       :short_desc => "False value missing method received",
