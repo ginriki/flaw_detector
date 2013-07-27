@@ -8,7 +8,7 @@ module InsnExt
   alias :_insn_stack_increase :insn_stack_increase
 
   if RUBY_VERSION =~ /^2.0/
-    VM_CALL_ARGS_BLOCKARG = (0x01 ** 2)
+    VM_CALL_ARGS_BLOCKARG = (0x01 << 2)
 
     # Override for substitution of CALL_INFO cast 
     # in c-function@insns_info.inc
