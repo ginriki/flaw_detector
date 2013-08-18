@@ -64,7 +64,12 @@ describe FlawDetector::InsnsInfo do
         end
       when "invokeblock"
         it "should have the same return value of InsnExt::insn_stack_increase when #{name}" do
-          ary_inv = [{:orig_argc => 1}]
+          case RUBY_VERSION[0..2]
+          when /^1.9/
+            ary_inv = [1,0]
+          when /^2.0/
+            ary_inv = [{:orig_argc => 1}]
+          end
           expect(InsnsInfo::insn_stack_increase(InsnsInfo::insn_num(name),ary_inv)).to eq(InsnExt::insn_stack_increase(InsnExt::insn_num(name),ary_inv))
         end
       else
