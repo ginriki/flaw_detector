@@ -7,12 +7,7 @@ require "flaw_detector/code_model/insns_frame"
 require "flaw_detector/code_model/cfg_node"
 require "flaw_detector/iseq/instruction_container"
 require File.expand_path("../../ext/insns_ext/insn_ext.rb", __FILE__)
-
-detector_path = File.expand_path("../flaw_detector/detector/", __FILE__)
-detector_files = Dir.entries(detector_path).grep(/_flow.rb$/)
-detector_files.each do |file_name|
-  require detector_path + "/" + file_name
-end
+require "flaw_detector/detector/detector"
 
 module FlawDetector
   OPERAND_0 = 1
