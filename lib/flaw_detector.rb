@@ -2,12 +2,12 @@ require "flaw_detector/version"
 require "flaw_detector/controller"
 require "flaw_detector/message"
 require "flaw_detector/formatter/csv_formatter"
-require "flaw_detector/detector/nil_false_path_flow"
 require "flaw_detector/code_model/code_document"
 require "flaw_detector/code_model/insns_frame"
 require "flaw_detector/code_model/cfg_node"
 require "flaw_detector/iseq/instruction_container"
 require File.expand_path("../../ext/insns_ext/insn_ext.rb", __FILE__)
+require "flaw_detector/detector/detector"
 
 module FlawDetector
   OPERAND_0 = 1

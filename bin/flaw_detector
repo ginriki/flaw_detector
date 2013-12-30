@@ -29,7 +29,12 @@ io = STDOUT
 io = File.open(rl_opts[:outfile], "w") if rl_opts[:outfile]
 formatter = eval("FlawDetector::Formatter::#{rl_opts[:format].capitalize}Formatter").new(io)
 con = FlawDetector::BasicController.new(formatter)
-con.detectors << FlawDetector::Detector::NilFalsePathFlow.new
+detector_path = File.expand_path("../../lib/flaw_detector/detector", __FILE__)
+detector_files = Dir.entries(detector_path).grep(/\.rb$/) - ["detector.rb","abstract_detector.rb"]
+detector_files.each do |file|
+  klass_name = File.basename(file, ".rb").split(/_/).map(&:capitalize).join
+  con.detectors << eval("FlawDetector::Detector::#{klass_name}.new")
+end
 if con.run(ARGV)
   puts "OK"
   exit 0
